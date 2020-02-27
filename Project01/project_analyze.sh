@@ -177,13 +177,14 @@ if [[ "$ARGS" == *"sshman"* ]] ; then
 
 fi
 # https://stackoverflow.com/questions/965053/extract-filename-and-extension-in-bash
+# http://mac1xa3.ca/u/furfaroj/test/dir.zip
 if [[ "$ARGS" == *"dunzip"* ]] ; then
 	echo "Enter remote file URL"
 	read RURL
-	RBNAME=$(basename RURL)
-	REXT="${filename##*.}"
+	RBNAME=$(basename "$RURL")
+	REXT="${RBNAME##*.}"
 	if [ "$REXT" == "zip" ] ; then
-		wget "$RURL"
+		wget "$RURL" >> "dunzip.log"
 	else
 		echo "ERROR: The requested file is not a ZIP file"
 	fi
