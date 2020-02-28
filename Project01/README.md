@@ -78,3 +78,4 @@ Argument name: `dunzip`
 Description: Prompts the user to enter a remote URL of a file to download and a local path specifying where the downloaded ZIP file should be unzipped. The program then retrieves the file from the remote URL and unzips it in the specified directory, deleting temporary files as it works. A test ZIP file can be found at the URL `http://mac1xa3.ca/u/furfaroj/test/dir.zip`  
 Reference Used:
  - https://stackoverflow.com/questions/965053/extract-filename-and-extension-in-bash
+ 
