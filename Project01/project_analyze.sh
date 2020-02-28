@@ -184,7 +184,20 @@ if [[ "$ARGS" == *"dunzip"* ]] ; then
 	RBNAME=$(basename "$RURL")
 	REXT="${RBNAME##*.}"
 	if [ "$REXT" == "zip" ] ; then
-		wget "$RURL" >> "dunzip.log"
+		wget -q "$RURL"
+		if [ -f "$RBNAME" ] ; then
+			echo "Enter local path to unzip to"
+			read LPATH
+			if [ ! -f "$LPATH/$RBNAME" ] ; then
+				mv -f "$RBNAME" "$LPATH"
+			fi
+			NEWPATH="$LPATH/$RBNAME"
+			unzip -q "$NEWPATH"
+			rm "$LPATH/$RBNAME"
+			echo "File retrieved and unzipped successfully"
+		else
+			echo "Remote file not found"
+		fi
 	else
 		echo "ERROR: The requested file is not a ZIP file"
 	fi
