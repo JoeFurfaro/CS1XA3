@@ -1,0 +1,31 @@
+#left-section {
+    background-color: #f6f6f6;
+}
+
+.bg-right-1 {
+    background-color: #eeeeee;
+}
+
+.bg-right-2 {
+    background-color: #d8d8d8;
+}
+
+.bg-main {
+    background-color: #e1e1e1;
+}
+
+.bg-main-2 {
+    background-color: #cccccc;
+}
+
+.bg-footer {
+    background-color: #bbbbbb;
+}
+
+a:focus {
+    outline: none;
+}
+
+img:hover {
+    cursor: pointer;
+}
