@@ -2,13 +2,24 @@
 
 {% block title %}Account Page{% endblock %}
 
+{% block css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+{% endblock %}
+
+
 {% block middle_column %}
     <div class="w3-row-padding">
         <div class="w3-col m12">
             <div class="w3-card w3-round w3-white">
                 <div class="w3-container w3-padding">
                     <h6 class="w3-opacity">Change Password</h6>
-                    <!--                     TODO Objective 3: Add Password Change Form -->
+                    <form style="margin-top:10px;" method="post" action="{% url 'social:account_view' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="type" value="password">
+                        <input class="" type="password" name="new-password" placeholder="New Password" value="" />
+                        <input type="submit" style="margin-top:10px;" value="Change Password" />
+                    </form>
                 </div>
             </div>
         </div>
@@ -18,7 +29,24 @@
             <div class="w3-card w3-round w3-white">
                 <div class="w3-container w3-padding">
                     <h6 class="w3-opacity">Update Info</h6>
-                    <!--                     TODO Objective 3: Add User Info Update Forms -->
+                    <form class="" method="post" action="{% url 'social:account_view' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="type" value="details">
+                        <label>Employment</label>
+                        <input class="" type="text" name="employment" placeholder="Employment" value="{{ user_info.employment }}" />
+                        <label>Location</label>
+                        <input class="" type="text" name="location" placeholder="Location" value="{{ user_info.location }}" />
+                        <label>Birthday</label><br />
+                        <input class="" type="date" name="birthday" value="{{ user_info.birthday }}" /><br />
+                        <input type="submit" style="margin-top:10px;" value="Save" />
+                    </form>
+                    <form style="margin-top:10px;" method="post" action="{% url 'social:account_view' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="type" value="interests">
+                        <label>Add New Interest</label>
+                        <input class="" type="text" name="interest" placeholder="New Interest" value="" />
+                        <input type="submit" style="margin-top:10px;" value="Add Interest" />
+                    </form>
                 </div>
             </div>
         </div>
