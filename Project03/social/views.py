@@ -17,10 +17,16 @@ def messages_view(request):
       out: (HttpResponse) - if user is authenticated, will render private.djhtml
     """
     if request.user.is_authenticated:
+        if request.session.get("num_post_show") == None:
+            request.session["num_post_show"] = 1
+
         user_info = models.UserInfo.objects.get(user=request.user)
 
         # TODO Objective 9: query for posts (HINT only return posts needed to be displayed)
-        posts = []
+        posts = models.Post.objects.all().order_by('-timestamp')
+        posts = posts[0:request.session.get("num_post_show")]
+        for post in posts:
+            post.self_liked = user_info in post.likes.all()
 
         # TODO Objective 10: check if user has like post, attach as a new attribute to each post
 
@@ -134,17 +140,23 @@ def like_view(request):
                              adds the current user to the likes attribute, then returns
                              an empty HttpResponse, 404 if any error occurs
     '''
-    postIDReq = request.POST.get('postID')
-    if postIDReq is not None:
+    post_id = request.POST.get('btnID')
+    if post_id is not None:
         # remove 'post-' from postID and convert to int
         # TODO Objective 10: parse post id from postIDReq
-        postID = 0
+        postID = int(post_id[5:])
 
         if request.user.is_authenticated:
             # TODO Objective 10: update Post model entry to add user to likes field
+            user_info = models.UserInfo.objects.get(user=request.user)
+            posts = models.Post.objects.all().order_by('-timestamp')
+
+            post = posts[postID]
+            if user_info not in post.likes.all():
+                post.likes.add(user_info)
 
             # return status='success'
-            return HttpResponse()
+            return HttpResponse('success')
         else:
             return redirect('login:login_view')
 
@@ -162,14 +174,15 @@ def post_submit_view(request):
    	  out : (HttpResponse) - after adding a new entry to the POST model, returns an empty HttpResponse,
                              or 404 if any error occurs
     '''
-    postContent = request.POST.get('postContent')
+    postContent = request.POST.get('post_text')
     if postContent is not None:
         if request.user.is_authenticated:
-
+            user_info = models.UserInfo.objects.get(user=request.user)
             # TODO Objective 8: Add a new entry to the Post model
-
+            post = models.Post(owner=user_info, content=postContent)
+            post.save()
             # return status='success'
-            return HttpResponse()
+            return HttpResponse("success")
         else:
             return redirect('login:login_view')
 
@@ -187,11 +200,14 @@ def more_post_view(request):
     '''
     if request.user.is_authenticated:
         # update the # of posts dispalyed
+        if request.session.get("num_post_show") == None:
+            request.session["num_post_show"] = 1
 
+        request.session["num_post_show"] += 1
         # TODO Objective 9: update how many posts are displayed/returned by messages_view
 
         # return status='success'
-        return HttpResponse()
+        return HttpResponse('success')
 
     return redirect('login:login_view')
 

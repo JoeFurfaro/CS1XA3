@@ -2,9 +2,20 @@
    | Handle Submitting Posts - called by $('#post-button').click(submitPost)
    ********************************************************************************************
    */
-function submitPost(event) {
-    alert('Post Button Pressed');
-    // TODO Objective 8: send contents of post-text via AJAX Post to post_submit_view (reload page upon success)
+function submitPost() {
+    // the id of the current button, should be fr-name where name is valid username
+    let json_data = { 'post_text' : $("#post-text").val() };
+    // globally defined in messages.djhtml using i{% url 'social:like_view' %}
+    let url_path = post_submit_url;
+
+    // AJAX post
+    $.post(url_path,
+           json_data,
+           function(data, status) {
+               if(status == 'success') {
+                   location.reload();
+               }
+           });
 }
 
 /* ********************************************************************************************
@@ -12,8 +23,20 @@ function submitPost(event) {
    ********************************************************************************************
    */
 function submitLike(event) {
-    alert('Like Button Pressed');
-    // TODO Objective 10: send post-n id via AJAX POST to like_view (reload page upon success)
+    // the id of the current button, should be fr-name where name is valid username
+    let btnID = event.target.id;
+    let json_data = { 'btnID' : btnID };
+    // globally defined in messages.djhtml using i{% url 'social:like_view' %}
+    let url_path = like_post_url;
+
+    // AJAX post
+    $.post(url_path,
+           json_data,
+           function(data, status) {
+               if(status == 'success') {
+                   location.reload();
+               }
+           });
 }
 
 /* ********************************************************************************************
